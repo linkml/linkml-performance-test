@@ -1,0 +1,83 @@
+id: https://github.com/geneontology/benchconfig
+name: benchconfig
+license: https://creativecommons.org/publicdomain/zero/1.0/
+version: 0.0.1
+
+prefixes:
+ linkml: https://w3id.org/linkml/
+ sdo: https://schema.org/
+ skos: http://www.w3.org/2004/02/skos/core#
+
+default_curi_maps:
+  - obo_context
+  - idot_context
+  - monarch_context
+  - semweb_context
+
+emit_prefixes:
+  - rdf
+  - rdfs
+  - xsd
+  - skos
+
+imports:
+ - linkml:types
+
+classes:
+  Event:
+    attributes:
+      duration:
+        range: float
+        equals_expression: "{end}-{start}"
+      start:
+        range: float
+      end:
+        range: float
+  BenchmarkResultSet:
+    attributes:
+      runs:
+        multivalued: true
+        range: BenchmarkRun
+      config:
+        range: BenchmarkConfig
+  BenchmarkConfig:
+    attributes:
+      linkml_version:
+      linkml_runtime_version:
+      python_version:
+      datamodel_generator:
+      entity_counts:
+        range: integer
+        multivalued: true
+      working_directory:
+  BenchmarkRun:
+    attributes:
+      config:
+        range: BenchmarkConfig
+      entity_count:
+        range: integer
+      create_object_event:
+        range: Event
+      json_dump_event:
+        range: Event
+      json_load_event:
+        range: Event
+      yaml_dump_event:
+        range: Event
+      yaml_load_event:
+        range: Event
+      rdf_dump_event:
+        range: Event
+      rdf_load_event:
+        range: Event
+      to_dict_event:
+        range: Event
+      plain_yaml_dump_event:
+        range: Event
+      plain_yaml_load_event:
+        range: Event
+      plain_json_dump_event:
+        range: Event
+      plain_json_load_event:
+        range: Event
+
