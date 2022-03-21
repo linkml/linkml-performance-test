@@ -6,16 +6,18 @@ import os
 from copy import deepcopy
 from pathlib import Path
 
+import click
 import yaml
 import json
 
 import linkml
 import linkml_runtime
 from linkml_runtime import SchemaView
-from linkml_runtime.dumpers import json_dumper, yaml_dumper, rdflib_dumper
+from linkml_runtime.dumpers import json_dumper, yaml_dumper, rdflib_dumper, csv_dumper
 from linkml_runtime.loaders import json_loader, yaml_loader, rdflib_loader
 from linkml_performance_test.model.obograph import *
 from linkml_performance_test.model.benchconfig import *
+from linkml_runtime.utils.introspection import package_schemaview
 
 from linkml_runtime.utils.yamlutils import YAMLRoot, as_json_object
 
@@ -61,7 +63,8 @@ class BenchmarkRunner:
         #assert isinstance(json_obj, JsonObj)
         # JSON
         run.json_dump_event = self.start()
-        json_dumper.dump(g, to_file=tmp_file, inject_type=False)
+        #json_dumper.dump(g, to_file=tmp_file, inject_type=False)
+        json_dumper.dump(g, to_file=tmp_file)
         self.end()
         run.json_load_event = self.start()
         g2 = json_loader.load(target_class=Graph, source=tmp_file)
@@ -116,6 +119,30 @@ class BenchmarkRunner:
         event.duration = event.end - event.start
         return event
 
+@click.command()
+@click.option('-E', '--entity-counts',
+              type=int,
+              default=(10, 100),
+              show_default=True,
+              multiple=True,
+              help="list of sizes of each graph to be used in test")
+@click.option('-d', '--working-directory',
+              required=True)
+@click.option('-o', '--output-file',
+              required=True,
+              help="path to TSV to store results")
+def main(entity_counts, working_directory, output_file):
+    runner = BenchmarkRunner()
+    runner.schemaview = package_schemaview('linkml_performance_test.model.obograph')
+    config = BenchmarkConfig(entity_counts=list(entity_counts), working_directory=working_directory)
+    print(config)
+    result = runner.multi_run(config)
+    print(yaml_dumper.dumps(result))
+    sv = package_schemaview('linkml_performance_test.model.benchconfig')
+    csv_dumper.dump(result, index_slot='runs', schemaview=sv, to_file=str(output_file))
+
+if __name__ == "__main__":
+    main()
 
 
 
