@@ -54,11 +54,11 @@ class BenchmarkRunner:
         logging.info(f'graph nodes = {len(g.nodes)}')
         tmp_file = str(Path(config.working_directory) / 'tmp')
         # as-json
-        json_obj = json.dumps(g.dict)
-        print(json_obj)
-        json_obj = as_json_object(g, inject_type=False)
-        print(json_obj)
-        assert isinstance(json_obj, JsonObj)
+        #json_obj = json.dumps(g.dict)
+        #print(json_obj)
+        #json_obj = as_json_object(g, inject_type=False)
+        #print(json_obj)
+        #assert isinstance(json_obj, JsonObj)
         # JSON
         run.json_dump_event = self.start()
         json_dumper.dump(g, to_file=tmp_file, inject_type=False)

@@ -12,3 +12,5 @@ $(SCHEMADIR)/%.py: $(SCHEMADIR)/%_dataclasses.py
 
 use-pydantic:
 	cp $(SCHEMADIR)/obograph_pydantic.py $(SCHEMADIR)/obograph.py
+use-dataclasses:
+	cp $(SCHEMADIR)/obograph_dataclasses.py $(SCHEMADIR)/obograph.py
