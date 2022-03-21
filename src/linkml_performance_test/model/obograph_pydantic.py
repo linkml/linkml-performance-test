@@ -1,505 +1,205 @@
-# Auto generated from obograph.yaml by pythongen.py version: 0.9.0
-# Generation date: 2022-03-20T17:30:27
-# Schema: obographs_linkml_model
-#
-# id: https://github.com/geneontology/obographs
-# description:
-# license: https://creativecommons.org/publicdomain/zero/1.0/
+from __future__ import annotations
+from datetime import datetime, date
+from enum import Enum
+from typing import List, Dict, Optional, Any
+from pydantic import BaseModel, Field
+from pydantic.dataclasses import dataclass
 
-import dataclasses
-import sys
-import re
-from jsonasobj2 import JsonObj, as_dict
-from typing import Optional, List, Union, Dict, ClassVar, Any
-from dataclasses import dataclass
-from linkml_runtime.linkml_model.meta import EnumDefinition, PermissibleValue, PvFormulaOptions
-
-from linkml_runtime.utils.slot import Slot
-from linkml_runtime.utils.metamodelcore import empty_list, empty_dict, bnode
-from linkml_runtime.utils.yamlutils import YAMLRoot, extended_str, extended_float, extended_int
-from linkml_runtime.utils.dataclass_extensions_376 import dataclasses_init_fn_with_kwargs
-from linkml_runtime.utils.formatutils import camelcase, underscore, sfx
-from linkml_runtime.utils.enumerations import EnumDefinitionImpl
-from rdflib import Namespace, URIRef
-from linkml_runtime.utils.curienamespace import CurieNamespace
-from linkml_runtime.linkml_model.types import Boolean, String
-from linkml_runtime.utils.metamodelcore import Bool
-
-metamodel_version = "1.7.0"
+metamodel_version = "None"
 version = "0.0.1"
 
-# Overwrite dataclasses _init_fn to add **kwargs in __init__
-dataclasses._init_fn = dataclasses_init_fn_with_kwargs
+# Pydantic config and validators
+class PydanticConfig:
+    """ Pydantic config https://pydantic-docs.helpmanual.io/usage/model_config/ """
 
-# Namespaces
-LINKML = CurieNamespace('linkml', 'https://w3id.org/linkml/')
-RDF = CurieNamespace('rdf', 'http://www.w3.org/1999/02/22-rdf-syntax-ns#')
-RDFS = CurieNamespace('rdfs', 'http://www.w3.org/2000/01/rdf-schema#')
-SDO = CurieNamespace('sdo', 'https://schema.org/')
-SKOS = CurieNamespace('skos', 'http://www.w3.org/2004/02/skos/core#')
-XSD = CurieNamespace('xsd', 'http://www.w3.org/2001/XMLSchema#')
-DEFAULT_ = CurieNamespace('', 'https://github.com/geneontology/obographs/')
+    validate_assignment = True
+    validate_all = True
+    underscore_attrs_are_private = True
+    extra = 'forbid'
+    arbitrary_types_allowed = True  # TODO re-evaluate this
 
 
-# Types
+class ScopesEnum(str, Enum):
+    
+    exact = "exact"
+    narrow = "narrow"
+    broad = "broad"
+    related = "related"
+    
+    
 
-# Class references
+class PredsEnum(str, Enum):
+    
+    hasExactSynonym = "hasExactSynonym"
+    hasNarrowSynonym = "hasNarrowSynonym"
+    hasBroadSynonym = "hasBroadSynonym"
+    hasRelatedSynonym = "hasRelatedSynonym"
+    
+    
 
-
-
-@dataclass
-class Graph(YAMLRoot):
-    _inherited_slots: ClassVar[List[str]] = []
-
-    class_class_uri: ClassVar[URIRef] = URIRef("https://github.com/geneontology/obographs/Graph")
-    class_class_curie: ClassVar[str] = None
-    class_name: ClassVar[str] = "Graph"
-    class_model_uri: ClassVar[URIRef] = URIRef("https://github.com/geneontology/obographs/Graph")
-
-    id: Optional[str] = None
-    lbl: Optional[str] = None
-    meta: Optional[Union[dict, "Meta"]] = None
-    nodes: Optional[Union[Union[dict, "Node"], List[Union[dict, "Node"]]]] = empty_list()
-    edges: Optional[Union[Union[dict, "Edge"], List[Union[dict, "Edge"]]]] = empty_list()
-    equivalentNodesSets: Optional[Union[Union[dict, "EquivalentNodesSet"], List[Union[dict, "EquivalentNodesSet"]]]] = empty_list()
-    logicalDefinitionAxioms: Optional[Union[Union[dict, "LogicalDefinitionAxiom"], List[Union[dict, "LogicalDefinitionAxiom"]]]] = empty_list()
-    domainRangeAxioms: Optional[Union[Union[dict, "DomainRangeAxiom"], List[Union[dict, "DomainRangeAxiom"]]]] = empty_list()
-    propertyChainAxioms: Optional[Union[Union[dict, "PropertyChainAxiom"], List[Union[dict, "PropertyChainAxiom"]]]] = empty_list()
-
-    def __post_init__(self, *_: List[str], **kwargs: Dict[str, Any]):
-        if self.id is not None and not isinstance(self.id, str):
-            self.id = str(self.id)
-
-        if self.lbl is not None and not isinstance(self.lbl, str):
-            self.lbl = str(self.lbl)
-
-        if self.meta is not None and not isinstance(self.meta, Meta):
-            self.meta = Meta(**as_dict(self.meta))
-
-        if not isinstance(self.nodes, list):
-            self.nodes = [self.nodes] if self.nodes is not None else []
-        self.nodes = [v if isinstance(v, Node) else Node(**as_dict(v)) for v in self.nodes]
-
-        if not isinstance(self.edges, list):
-            self.edges = [self.edges] if self.edges is not None else []
-        self.edges = [v if isinstance(v, Edge) else Edge(**as_dict(v)) for v in self.edges]
-
-        if not isinstance(self.equivalentNodesSets, list):
-            self.equivalentNodesSets = [self.equivalentNodesSets] if self.equivalentNodesSets is not None else []
-        self.equivalentNodesSets = [v if isinstance(v, EquivalentNodesSet) else EquivalentNodesSet(**as_dict(v)) for v in self.equivalentNodesSets]
-
-        if not isinstance(self.logicalDefinitionAxioms, list):
-            self.logicalDefinitionAxioms = [self.logicalDefinitionAxioms] if self.logicalDefinitionAxioms is not None else []
-        self.logicalDefinitionAxioms = [v if isinstance(v, LogicalDefinitionAxiom) else LogicalDefinitionAxiom(**as_dict(v)) for v in self.logicalDefinitionAxioms]
-
-        if not isinstance(self.domainRangeAxioms, list):
-            self.domainRangeAxioms = [self.domainRangeAxioms] if self.domainRangeAxioms is not None else []
-        self.domainRangeAxioms = [v if isinstance(v, DomainRangeAxiom) else DomainRangeAxiom(**as_dict(v)) for v in self.domainRangeAxioms]
-
-        if not isinstance(self.propertyChainAxioms, list):
-            self.propertyChainAxioms = [self.propertyChainAxioms] if self.propertyChainAxioms is not None else []
-        self.propertyChainAxioms = [v if isinstance(v, PropertyChainAxiom) else PropertyChainAxiom(**as_dict(v)) for v in self.propertyChainAxioms]
-
-        super().__post_init__(**kwargs)
+@dataclass(config=PydanticConfig)
+class Graph:
+    
+    id: Optional[str] = Field(None)
+    lbl: Optional[str] = Field(None)
+    meta: Optional[Meta] = Field(None)
+    nodes: Optional[List[Node]] = Field(None)
+    edges: Optional[List[Edge]] = Field(None)
+    equivalentNodesSets: Optional[List[EquivalentNodesSet]] = Field(None)
+    logicalDefinitionAxioms: Optional[List[LogicalDefinitionAxiom]] = Field(None)
+    domainRangeAxioms: Optional[List[DomainRangeAxiom]] = Field(None)
+    propertyChainAxioms: Optional[List[PropertyChainAxiom]] = Field(None)
+    
 
 
-@dataclass
-class Node(YAMLRoot):
-    _inherited_slots: ClassVar[List[str]] = []
-
-    class_class_uri: ClassVar[URIRef] = URIRef("https://github.com/geneontology/obographs/Node")
-    class_class_curie: ClassVar[str] = None
-    class_name: ClassVar[str] = "Node"
-    class_model_uri: ClassVar[URIRef] = URIRef("https://github.com/geneontology/obographs/Node")
-
-    id: Optional[str] = None
-    label: Optional[str] = None
-    type: Optional[str] = None
-    meta: Optional[Union[dict, "Meta"]] = None
-
-    def __post_init__(self, *_: List[str], **kwargs: Dict[str, Any]):
-        if self.id is not None and not isinstance(self.id, str):
-            self.id = str(self.id)
-
-        if self.label is not None and not isinstance(self.label, str):
-            self.label = str(self.label)
-
-        if self.type is not None and not isinstance(self.type, str):
-            self.type = str(self.type)
-
-        if self.meta is not None and not isinstance(self.meta, Meta):
-            self.meta = Meta(**as_dict(self.meta))
-
-        super().__post_init__(**kwargs)
+@dataclass(config=PydanticConfig)
+class Node:
+    
+    id: Optional[str] = Field(None)
+    label: Optional[str] = Field(None)
+    type: Optional[str] = Field(None)
+    meta: Optional[Meta] = Field(None)
+    
 
 
-@dataclass
-class Edge(YAMLRoot):
-    _inherited_slots: ClassVar[List[str]] = []
-
-    class_class_uri: ClassVar[URIRef] = URIRef("https://github.com/geneontology/obographs/Edge")
-    class_class_curie: ClassVar[str] = None
-    class_name: ClassVar[str] = "Edge"
-    class_model_uri: ClassVar[URIRef] = URIRef("https://github.com/geneontology/obographs/Edge")
-
-    sub: Optional[str] = None
-    pred: Optional[str] = None
-    obj: Optional[str] = None
-    meta: Optional[Union[dict, "Meta"]] = None
-
-    def __post_init__(self, *_: List[str], **kwargs: Dict[str, Any]):
-        if self.sub is not None and not isinstance(self.sub, str):
-            self.sub = str(self.sub)
-
-        if self.pred is not None and not isinstance(self.pred, str):
-            self.pred = str(self.pred)
-
-        if self.obj is not None and not isinstance(self.obj, str):
-            self.obj = str(self.obj)
-
-        if self.meta is not None and not isinstance(self.meta, Meta):
-            self.meta = Meta(**as_dict(self.meta))
-
-        super().__post_init__(**kwargs)
+@dataclass(config=PydanticConfig)
+class Edge:
+    
+    sub: Optional[str] = Field(None)
+    pred: Optional[str] = Field(None)
+    obj: Optional[str] = Field(None)
+    meta: Optional[Meta] = Field(None)
+    
 
 
-@dataclass
-class Meta(YAMLRoot):
-    _inherited_slots: ClassVar[List[str]] = []
-
-    class_class_uri: ClassVar[URIRef] = URIRef("https://github.com/geneontology/obographs/Meta")
-    class_class_curie: ClassVar[str] = None
-    class_name: ClassVar[str] = "Meta"
-    class_model_uri: ClassVar[URIRef] = URIRef("https://github.com/geneontology/obographs/Meta")
-
-    subsets: Optional[Union[str, List[str]]] = empty_list()
-    version: Optional[str] = None
-    comments: Optional[Union[str, List[str]]] = empty_list()
-    definition: Optional[Union[dict, "DefinitionPropertyValue"]] = None
-    xrefs: Optional[Union[str, List[str]]] = empty_list()
-    synonyms: Optional[Union[Union[dict, "SynonymPropertyValue"], List[Union[dict, "SynonymPropertyValue"]]]] = empty_list()
-    basicPropertyValues: Optional[Union[dict, "BasicPropertyValue"]] = None
-    deprecated: Optional[Union[bool, Bool]] = None
-
-    def __post_init__(self, *_: List[str], **kwargs: Dict[str, Any]):
-        if not isinstance(self.subsets, list):
-            self.subsets = [self.subsets] if self.subsets is not None else []
-        self.subsets = [v if isinstance(v, str) else str(v) for v in self.subsets]
-
-        if self.version is not None and not isinstance(self.version, str):
-            self.version = str(self.version)
-
-        if not isinstance(self.comments, list):
-            self.comments = [self.comments] if self.comments is not None else []
-        self.comments = [v if isinstance(v, str) else str(v) for v in self.comments]
-
-        if self.definition is not None and not isinstance(self.definition, DefinitionPropertyValue):
-            self.definition = DefinitionPropertyValue(**as_dict(self.definition))
-
-        if not isinstance(self.xrefs, list):
-            self.xrefs = [self.xrefs] if self.xrefs is not None else []
-        self.xrefs = [v if isinstance(v, str) else str(v) for v in self.xrefs]
-
-        if not isinstance(self.synonyms, list):
-            self.synonyms = [self.synonyms] if self.synonyms is not None else []
-        self.synonyms = [v if isinstance(v, SynonymPropertyValue) else SynonymPropertyValue(**as_dict(v)) for v in self.synonyms]
-
-        if self.basicPropertyValues is not None and not isinstance(self.basicPropertyValues, BasicPropertyValue):
-            self.basicPropertyValues = BasicPropertyValue(**as_dict(self.basicPropertyValues))
-
-        if self.deprecated is not None and not isinstance(self.deprecated, Bool):
-            self.deprecated = Bool(self.deprecated)
-
-        super().__post_init__(**kwargs)
+@dataclass(config=PydanticConfig)
+class Meta:
+    
+    subsets: Optional[List[str]] = Field(None)
+    version: Optional[str] = Field(None)
+    comments: Optional[List[str]] = Field(None)
+    definition: Optional[DefinitionPropertyValue] = Field(None)
+    xrefs: Optional[List[str]] = Field(None)
+    synonyms: Optional[List[SynonymPropertyValue]] = Field(None)
+    basicPropertyValues: Optional[BasicPropertyValue] = Field(None)
+    deprecated: Optional[bool] = Field(None)
+    
 
 
-@dataclass
-class PropertyValue(YAMLRoot):
-    _inherited_slots: ClassVar[List[str]] = []
-
-    class_class_uri: ClassVar[URIRef] = URIRef("https://github.com/geneontology/obographs/PropertyValue")
-    class_class_curie: ClassVar[str] = None
-    class_name: ClassVar[str] = "PropertyValue"
-    class_model_uri: ClassVar[URIRef] = URIRef("https://github.com/geneontology/obographs/PropertyValue")
-
-    pred: Optional[str] = None
-    val: Optional[str] = None
-    xrefs: Optional[Union[str, List[str]]] = empty_list()
-    meta: Optional[Union[dict, Meta]] = None
-
-    def __post_init__(self, *_: List[str], **kwargs: Dict[str, Any]):
-        if self.pred is not None and not isinstance(self.pred, str):
-            self.pred = str(self.pred)
-
-        if self.val is not None and not isinstance(self.val, str):
-            self.val = str(self.val)
-
-        if not isinstance(self.xrefs, list):
-            self.xrefs = [self.xrefs] if self.xrefs is not None else []
-        self.xrefs = [v if isinstance(v, str) else str(v) for v in self.xrefs]
-
-        if self.meta is not None and not isinstance(self.meta, Meta):
-            self.meta = Meta(**as_dict(self.meta))
-
-        super().__post_init__(**kwargs)
+@dataclass(config=PydanticConfig)
+class PropertyValue:
+    
+    pred: Optional[str] = Field(None)
+    val: Optional[str] = Field(None)
+    xrefs: Optional[List[str]] = Field(None)
+    meta: Optional[Meta] = Field(None)
+    
 
 
+@dataclass(config=PydanticConfig)
 class DefinitionPropertyValue(PropertyValue):
-    _inherited_slots: ClassVar[List[str]] = []
+    
+    pred: Optional[str] = Field(None)
+    val: Optional[str] = Field(None)
+    xrefs: Optional[List[str]] = Field(None)
+    meta: Optional[Meta] = Field(None)
+    
 
-    class_class_uri: ClassVar[URIRef] = URIRef("https://github.com/geneontology/obographs/DefinitionPropertyValue")
-    class_class_curie: ClassVar[str] = None
-    class_name: ClassVar[str] = "DefinitionPropertyValue"
-    class_model_uri: ClassVar[URIRef] = URIRef("https://github.com/geneontology/obographs/DefinitionPropertyValue")
 
-
+@dataclass(config=PydanticConfig)
 class BasicPropertyValue(PropertyValue):
-    _inherited_slots: ClassVar[List[str]] = []
+    
+    pred: Optional[str] = Field(None)
+    val: Optional[str] = Field(None)
+    xrefs: Optional[List[str]] = Field(None)
+    meta: Optional[Meta] = Field(None)
+    
 
-    class_class_uri: ClassVar[URIRef] = URIRef("https://github.com/geneontology/obographs/BasicPropertyValue")
-    class_class_curie: ClassVar[str] = None
-    class_name: ClassVar[str] = "BasicPropertyValue"
-    class_model_uri: ClassVar[URIRef] = URIRef("https://github.com/geneontology/obographs/BasicPropertyValue")
 
-
+@dataclass(config=PydanticConfig)
 class XrefPropertyValue(PropertyValue):
-    _inherited_slots: ClassVar[List[str]] = []
+    
+    pred: Optional[str] = Field(None)
+    val: Optional[str] = Field(None)
+    xrefs: Optional[List[str]] = Field(None)
+    meta: Optional[Meta] = Field(None)
+    
 
-    class_class_uri: ClassVar[URIRef] = URIRef("https://github.com/geneontology/obographs/XrefPropertyValue")
-    class_class_curie: ClassVar[str] = None
-    class_name: ClassVar[str] = "XrefPropertyValue"
-    class_model_uri: ClassVar[URIRef] = URIRef("https://github.com/geneontology/obographs/XrefPropertyValue")
 
-
-@dataclass
+@dataclass(config=PydanticConfig)
 class SynonymPropertyValue(PropertyValue):
-    _inherited_slots: ClassVar[List[str]] = []
-
-    class_class_uri: ClassVar[URIRef] = URIRef("https://github.com/geneontology/obographs/SynonymPropertyValue")
-    class_class_curie: ClassVar[str] = None
-    class_name: ClassVar[str] = "SynonymPropertyValue"
-    class_model_uri: ClassVar[URIRef] = URIRef("https://github.com/geneontology/obographs/SynonymPropertyValue")
-
-    synonymType: Optional[str] = None
-    isExact: Optional[Union[bool, Bool]] = None
-    scope: Optional[Union[str, "ScopesEnum"]] = None
-
-    def __post_init__(self, *_: List[str], **kwargs: Dict[str, Any]):
-        if self.synonymType is not None and not isinstance(self.synonymType, str):
-            self.synonymType = str(self.synonymType)
-
-        if self.isExact is not None and not isinstance(self.isExact, Bool):
-            self.isExact = Bool(self.isExact)
-
-        if self.scope is not None and not isinstance(self.scope, ScopesEnum):
-            self.scope = ScopesEnum(self.scope)
-
-        super().__post_init__(**kwargs)
+    
+    synonymType: Optional[str] = Field(None)
+    isExact: Optional[bool] = Field(None)
+    scope: Optional[ScopesEnum] = Field(None)
+    pred: Optional[str] = Field(None)
+    val: Optional[str] = Field(None)
+    xrefs: Optional[List[str]] = Field(None)
+    meta: Optional[Meta] = Field(None)
+    
 
 
-@dataclass
-class Axiom(YAMLRoot):
-    _inherited_slots: ClassVar[List[str]] = []
-
-    class_class_uri: ClassVar[URIRef] = URIRef("https://github.com/geneontology/obographs/Axiom")
-    class_class_curie: ClassVar[str] = None
-    class_name: ClassVar[str] = "Axiom"
-    class_model_uri: ClassVar[URIRef] = URIRef("https://github.com/geneontology/obographs/Axiom")
-
-    meta: Optional[Union[dict, Meta]] = None
-
-    def __post_init__(self, *_: List[str], **kwargs: Dict[str, Any]):
-        if self.meta is not None and not isinstance(self.meta, Meta):
-            self.meta = Meta(**as_dict(self.meta))
-
-        super().__post_init__(**kwargs)
+@dataclass(config=PydanticConfig)
+class Axiom:
+    
+    meta: Optional[Meta] = Field(None)
+    
 
 
+@dataclass(config=PydanticConfig)
 class DomainRangeAxiom(Axiom):
-    _inherited_slots: ClassVar[List[str]] = []
-
-    class_class_uri: ClassVar[URIRef] = URIRef("https://github.com/geneontology/obographs/DomainRangeAxiom")
-    class_class_curie: ClassVar[str] = None
-    class_name: ClassVar[str] = "DomainRangeAxiom"
-    class_model_uri: ClassVar[URIRef] = URIRef("https://github.com/geneontology/obographs/DomainRangeAxiom")
+    
+    meta: Optional[Meta] = Field(None)
+    
 
 
-@dataclass
+@dataclass(config=PydanticConfig)
 class EquivalentNodesSet(Axiom):
-    _inherited_slots: ClassVar[List[str]] = []
-
-    class_class_uri: ClassVar[URIRef] = URIRef("https://github.com/geneontology/obographs/EquivalentNodesSet")
-    class_class_curie: ClassVar[str] = None
-    class_name: ClassVar[str] = "EquivalentNodesSet"
-    class_model_uri: ClassVar[URIRef] = URIRef("https://github.com/geneontology/obographs/EquivalentNodesSet")
-
-    representitiveNodeId: Optional[str] = None
-    nodeIds: Optional[Union[str, List[str]]] = empty_list()
-
-    def __post_init__(self, *_: List[str], **kwargs: Dict[str, Any]):
-        if self.representitiveNodeId is not None and not isinstance(self.representitiveNodeId, str):
-            self.representitiveNodeId = str(self.representitiveNodeId)
-
-        if not isinstance(self.nodeIds, list):
-            self.nodeIds = [self.nodeIds] if self.nodeIds is not None else []
-        self.nodeIds = [v if isinstance(v, str) else str(v) for v in self.nodeIds]
-
-        super().__post_init__(**kwargs)
+    
+    representitiveNodeId: Optional[str] = Field(None)
+    nodeIds: Optional[List[str]] = Field(None)
+    meta: Optional[Meta] = Field(None)
+    
 
 
-@dataclass
-class ExistentialRestrictionExpression(YAMLRoot):
-    _inherited_slots: ClassVar[List[str]] = []
-
-    class_class_uri: ClassVar[URIRef] = URIRef("https://github.com/geneontology/obographs/ExistentialRestrictionExpression")
-    class_class_curie: ClassVar[str] = None
-    class_name: ClassVar[str] = "ExistentialRestrictionExpression"
-    class_model_uri: ClassVar[URIRef] = URIRef("https://github.com/geneontology/obographs/ExistentialRestrictionExpression")
-
-    fillerId: Optional[str] = None
-    propertyId: Optional[str] = None
-
-    def __post_init__(self, *_: List[str], **kwargs: Dict[str, Any]):
-        if self.fillerId is not None and not isinstance(self.fillerId, str):
-            self.fillerId = str(self.fillerId)
-
-        if self.propertyId is not None and not isinstance(self.propertyId, str):
-            self.propertyId = str(self.propertyId)
-
-        super().__post_init__(**kwargs)
+@dataclass(config=PydanticConfig)
+class ExistentialRestrictionExpression:
+    
+    fillerId: Optional[str] = Field(None)
+    propertyId: Optional[str] = Field(None)
+    
 
 
+@dataclass(config=PydanticConfig)
 class LogicalDefinitionAxiom(Axiom):
-    _inherited_slots: ClassVar[List[str]] = []
-
-    class_class_uri: ClassVar[URIRef] = URIRef("https://github.com/geneontology/obographs/LogicalDefinitionAxiom")
-    class_class_curie: ClassVar[str] = None
-    class_name: ClassVar[str] = "LogicalDefinitionAxiom"
-    class_model_uri: ClassVar[URIRef] = URIRef("https://github.com/geneontology/obographs/LogicalDefinitionAxiom")
+    
+    meta: Optional[Meta] = Field(None)
+    
 
 
+@dataclass(config=PydanticConfig)
 class PropertyChainAxiom(Axiom):
-    _inherited_slots: ClassVar[List[str]] = []
-
-    class_class_uri: ClassVar[URIRef] = URIRef("https://github.com/geneontology/obographs/PropertyChainAxiom")
-    class_class_curie: ClassVar[str] = None
-    class_name: ClassVar[str] = "PropertyChainAxiom"
-    class_model_uri: ClassVar[URIRef] = URIRef("https://github.com/geneontology/obographs/PropertyChainAxiom")
+    
+    meta: Optional[Meta] = Field(None)
+    
 
 
-# Enumerations
-class ScopesEnum(EnumDefinitionImpl):
 
-    exact = PermissibleValue(text="exact")
-    narrow = PermissibleValue(text="narrow")
-    broad = PermissibleValue(text="broad")
-    related = PermissibleValue(text="related")
+# Update forward refs
+# see https://pydantic-docs.helpmanual.io/usage/postponed_annotations/
+Graph.__pydantic_model__.update_forward_refs()
+Node.__pydantic_model__.update_forward_refs()
+Edge.__pydantic_model__.update_forward_refs()
+Meta.__pydantic_model__.update_forward_refs()
+PropertyValue.__pydantic_model__.update_forward_refs()
+DefinitionPropertyValue.__pydantic_model__.update_forward_refs()
+BasicPropertyValue.__pydantic_model__.update_forward_refs()
+XrefPropertyValue.__pydantic_model__.update_forward_refs()
+SynonymPropertyValue.__pydantic_model__.update_forward_refs()
+Axiom.__pydantic_model__.update_forward_refs()
+DomainRangeAxiom.__pydantic_model__.update_forward_refs()
+EquivalentNodesSet.__pydantic_model__.update_forward_refs()
+ExistentialRestrictionExpression.__pydantic_model__.update_forward_refs()
+LogicalDefinitionAxiom.__pydantic_model__.update_forward_refs()
+PropertyChainAxiom.__pydantic_model__.update_forward_refs()
 
-    _defn = EnumDefinition(
-        name="ScopesEnum",
-    )
-
-class PredsEnum(EnumDefinitionImpl):
-
-    hasExactSynonym = PermissibleValue(text="hasExactSynonym")
-    hasNarrowSynonym = PermissibleValue(text="hasNarrowSynonym")
-    hasBroadSynonym = PermissibleValue(text="hasBroadSynonym")
-    hasRelatedSynonym = PermissibleValue(text="hasRelatedSynonym")
-
-    _defn = EnumDefinition(
-        name="PredsEnum",
-    )
-
-# Slots
-class slots:
-    pass
-
-slots.sub = Slot(uri=DEFAULT_.sub, name="sub", curie=DEFAULT_.curie('sub'),
-                   model_uri=DEFAULT_.sub, domain=None, range=Optional[str])
-
-slots.pred = Slot(uri=DEFAULT_.pred, name="pred", curie=DEFAULT_.curie('pred'),
-                   model_uri=DEFAULT_.pred, domain=None, range=Optional[str])
-
-slots.obj = Slot(uri=DEFAULT_.obj, name="obj", curie=DEFAULT_.curie('obj'),
-                   model_uri=DEFAULT_.obj, domain=None, range=Optional[str])
-
-slots.id = Slot(uri=DEFAULT_.id, name="id", curie=DEFAULT_.curie('id'),
-                   model_uri=DEFAULT_.id, domain=None, range=Optional[str])
-
-slots.val = Slot(uri=DEFAULT_.val, name="val", curie=DEFAULT_.curie('val'),
-                   model_uri=DEFAULT_.val, domain=None, range=Optional[str])
-
-slots.label = Slot(uri=DEFAULT_.label, name="label", curie=DEFAULT_.curie('label'),
-                   model_uri=DEFAULT_.label, domain=None, range=Optional[str])
-
-slots.type = Slot(uri=DEFAULT_.type, name="type", curie=DEFAULT_.curie('type'),
-                   model_uri=DEFAULT_.type, domain=None, range=Optional[str])
-
-slots.meta = Slot(uri=DEFAULT_.meta, name="meta", curie=DEFAULT_.curie('meta'),
-                   model_uri=DEFAULT_.meta, domain=None, range=Optional[Union[dict, Meta]])
-
-slots.definition = Slot(uri=DEFAULT_.definition, name="definition", curie=DEFAULT_.curie('definition'),
-                   model_uri=DEFAULT_.definition, domain=None, range=Optional[Union[dict, DefinitionPropertyValue]])
-
-slots.basicPropertyValues = Slot(uri=DEFAULT_.basicPropertyValues, name="basicPropertyValues", curie=DEFAULT_.curie('basicPropertyValues'),
-                   model_uri=DEFAULT_.basicPropertyValues, domain=None, range=Optional[Union[dict, BasicPropertyValue]])
-
-slots.comments = Slot(uri=DEFAULT_.comments, name="comments", curie=DEFAULT_.curie('comments'),
-                   model_uri=DEFAULT_.comments, domain=None, range=Optional[Union[str, List[str]]])
-
-slots.version = Slot(uri=DEFAULT_.version, name="version", curie=DEFAULT_.curie('version'),
-                   model_uri=DEFAULT_.version, domain=None, range=Optional[str])
-
-slots.deprecated = Slot(uri=DEFAULT_.deprecated, name="deprecated", curie=DEFAULT_.curie('deprecated'),
-                   model_uri=DEFAULT_.deprecated, domain=None, range=Optional[Union[bool, Bool]])
-
-slots.subsets = Slot(uri=DEFAULT_.subsets, name="subsets", curie=DEFAULT_.curie('subsets'),
-                   model_uri=DEFAULT_.subsets, domain=None, range=Optional[Union[str, List[str]]])
-
-slots.xrefs = Slot(uri=DEFAULT_.xrefs, name="xrefs", curie=DEFAULT_.curie('xrefs'),
-                   model_uri=DEFAULT_.xrefs, domain=None, range=Optional[Union[str, List[str]]])
-
-slots.lbl = Slot(uri=DEFAULT_.lbl, name="lbl", curie=DEFAULT_.curie('lbl'),
-                   model_uri=DEFAULT_.lbl, domain=None, range=Optional[str])
-
-slots.nodes = Slot(uri=DEFAULT_.nodes, name="nodes", curie=DEFAULT_.curie('nodes'),
-                   model_uri=DEFAULT_.nodes, domain=None, range=Optional[Union[Union[dict, Node], List[Union[dict, Node]]]])
-
-slots.edges = Slot(uri=DEFAULT_.edges, name="edges", curie=DEFAULT_.curie('edges'),
-                   model_uri=DEFAULT_.edges, domain=None, range=Optional[Union[Union[dict, Edge], List[Union[dict, Edge]]]])
-
-slots.equivalentNodesSets = Slot(uri=DEFAULT_.equivalentNodesSets, name="equivalentNodesSets", curie=DEFAULT_.curie('equivalentNodesSets'),
-                   model_uri=DEFAULT_.equivalentNodesSets, domain=None, range=Optional[Union[Union[dict, EquivalentNodesSet], List[Union[dict, EquivalentNodesSet]]]])
-
-slots.logicalDefinitionAxioms = Slot(uri=DEFAULT_.logicalDefinitionAxioms, name="logicalDefinitionAxioms", curie=DEFAULT_.curie('logicalDefinitionAxioms'),
-                   model_uri=DEFAULT_.logicalDefinitionAxioms, domain=None, range=Optional[Union[Union[dict, LogicalDefinitionAxiom], List[Union[dict, LogicalDefinitionAxiom]]]])
-
-slots.domainRangeAxioms = Slot(uri=DEFAULT_.domainRangeAxioms, name="domainRangeAxioms", curie=DEFAULT_.curie('domainRangeAxioms'),
-                   model_uri=DEFAULT_.domainRangeAxioms, domain=None, range=Optional[Union[Union[dict, DomainRangeAxiom], List[Union[dict, DomainRangeAxiom]]]])
-
-slots.propertyChainAxioms = Slot(uri=DEFAULT_.propertyChainAxioms, name="propertyChainAxioms", curie=DEFAULT_.curie('propertyChainAxioms'),
-                   model_uri=DEFAULT_.propertyChainAxioms, domain=None, range=Optional[Union[Union[dict, PropertyChainAxiom], List[Union[dict, PropertyChainAxiom]]]])
-
-slots.representitiveNodeId = Slot(uri=DEFAULT_.representitiveNodeId, name="representitiveNodeId", curie=DEFAULT_.curie('representitiveNodeId'),
-                   model_uri=DEFAULT_.representitiveNodeId, domain=None, range=Optional[str])
-
-slots.nodeIds = Slot(uri=DEFAULT_.nodeIds, name="nodeIds", curie=DEFAULT_.curie('nodeIds'),
-                   model_uri=DEFAULT_.nodeIds, domain=None, range=Optional[Union[str, List[str]]])
-
-slots.fillerId = Slot(uri=DEFAULT_.fillerId, name="fillerId", curie=DEFAULT_.curie('fillerId'),
-                   model_uri=DEFAULT_.fillerId, domain=None, range=Optional[str])
-
-slots.propertyId = Slot(uri=DEFAULT_.propertyId, name="propertyId", curie=DEFAULT_.curie('propertyId'),
-                   model_uri=DEFAULT_.propertyId, domain=None, range=Optional[str])
-
-slots.synonyms = Slot(uri=DEFAULT_.synonyms, name="synonyms", curie=DEFAULT_.curie('synonyms'),
-                   model_uri=DEFAULT_.synonyms, domain=None, range=Optional[Union[Union[dict, SynonymPropertyValue], List[Union[dict, SynonymPropertyValue]]]])
-
-slots.synonymType = Slot(uri=DEFAULT_.synonymType, name="synonymType", curie=DEFAULT_.curie('synonymType'),
-                   model_uri=DEFAULT_.synonymType, domain=None, range=Optional[str])
-
-slots.scope = Slot(uri=DEFAULT_.scope, name="scope", curie=DEFAULT_.curie('scope'),
-                   model_uri=DEFAULT_.scope, domain=None, range=Optional[Union[str, "ScopesEnum"]])
-
-slots.isExact = Slot(uri=DEFAULT_.isExact, name="isExact", curie=DEFAULT_.curie('isExact'),
-                   model_uri=DEFAULT_.isExact, domain=None, range=Optional[Union[bool, Bool]])
